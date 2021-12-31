@@ -132,8 +132,25 @@ on the Arduino side, I would have an active buffer, a ready buffer and a receivi
 When the data starts coming, 1st the active buffer is filled, then the ready buffer is filled, then the ready buffer starts being played and a request for new data is sent to PC, when the data is received it is going to fill the receiving buffer, when the active buffer is played, a new request gets sent to PC for new data, the active becomes --> the receiving, which becomes --> the ready, which becomes the active, creating a cirular buffer.
 With this algorithm there is a 200 samples backup which can account for a 100/8 = 12.5ms jitter in the communication channel for the streaming.
 We will see how thi works...
+...
+Well, the plans have chaged..., with the arrival of the ESP32-CAM...
 
+## The New architecure
+Since the arrival of the ESP32-CAM, which has much more power than the Arduino, The ESP32-CAM will be the BRAIN of Matty and the Arduino will simply be an interface with the motors, the servos and the distance sensor. I am palnning also to connect a speaker directly to the Arduino DAC, and a MIC through a I2S interface.
+The ESP32-CAM will be responible for WiFi connection, SDcard for file strorage... planning on using both the CAM and the SDcard, only 4 pins will be avaiable, 2 can be used for the serial interface and 2 can be used for an evenatual additional I2C interface.
 
+The connection between the ESP32-CAM and the Arduino will be by the Serial interface.
+
+### The Mic
+I am planning to use the Mic for providing vocal commands to Matty... Matty will be always listening... the Mic I have is INMP441 which gives a 24bit data trhrough an I2S interface... oops... I2S interface in not implemented in Arduino, beside a few models of them... OK then I am restriced in using an analog Mic and use the 8bit ADC embedded into the Arduino. I am planning on using 8KHz sampling rate (same as the speaker)... hope the quality will be sufficient...
+
+### The ESP32 - Arduino Serial Interface
+Mic stream will need 8 bit x 8Khz = 64 Kbit/s (Mic --> Arduino --> ESP-CAM)
+Speaker same as Mic but in opposit direction (ESP-CAM --> Arduino --> Speaker)
+Other data... whatever is left.
+Minimum data rate should be 160,000 bit/sec (which is a multiple of 16MHz which I suspect is the clock frequency of the ArtMEGA128)
+
+Should I use the I2C interface instead?
 
 ## What is next
 1. adding a speaker and the ability to play sounds
