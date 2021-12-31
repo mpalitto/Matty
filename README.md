@@ -151,6 +151,14 @@ Other data... whatever is left.
 Minimum data rate should be 160,000 bit/sec (which is a multiple of 16MHz which I suspect is the clock frequency of the ArtMEGA128)
 
 Should I use the I2C interface instead?
+It looks like all Arduino have the ability of implementing the I2C interface by using the Wire.h library and the pins A4 and A5 (analog pin that are connected to the I2C circuitry)... I am not sure that will work on the custom Arduino on Matty...
+I2C has 2 different transmission speeds: standard (100Kbit/s) and fast (400Kbit/s).
+
+Yeah! it does work :) I was successfull in getting the ESP the I2C Master and tha Arduino the Slave. I did setup the clock for 400Kbit/s and I did not have any issue!
+
+it resulted in the ESPmaster_writer and slave_reader(Arduino) into the Matty/I2Cplayground. These 2 files get the Master to send some data to the Slave which will print the data to the Console. 6x8bits every ms, which results in 40kbit/sec. 
+
+Now I am going to try connection both direction...
 
 ## What is next
 1. adding a speaker and the ability to play sounds
