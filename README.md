@@ -96,8 +96,11 @@ R2D2 A-Z sounds: http://www.optimiced.com/en/2021/04/08/r2-d2-sounds-download/
 I need to convert this mp3 files to a vector of integers...
 
 1st step: used audocity to convert file to WAVe file with 8bits @ 8KHz
+
 2nd step: used sox for converting WAV file to RAW format with the following command:
+
 ``sox R2D2-sample-message.wav -r 8000 -c 1 --bits 8 --encoding unsigned-integer R2D2-sample-message.raw``
+
 3rd step: convert the binary file into CSV using the following python script:
 
 ```
