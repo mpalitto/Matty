@@ -188,7 +188,9 @@ The Arduino doesn't know how many samples are part of the same sound... thus it 
 
 This will require that the handshake between the Arduino and the ESP-CAM is fast enogh to allow the BACKUP buffer to be filled in time...
 
-In case thera are 100 Samples, 100/8k = 0.0125 secs = 12.5ms is that going to be enough?... we will see.
+In case there are 100 Samples, 100/8k = 0.0125 secs = 12.5ms is that going to be enough?... we will see.
+
+Anyway, I found out that on each I2C message it can be sent up to 32 bytes of data... I will try limiting the buffer size to 30....
 
 ## What is next
 1. adding a speaker and the ability to play sounds
