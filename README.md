@@ -3,19 +3,19 @@ Arduino based robot
 
 ## The Resurrection
 Bought in the USA a few years ago... as a personal toy, was left un-used for years (maybe 10 yrs)... and lost all documentation, but I kept it and even took to Italy (where I live now) for the emotional attachment I developed to it.
-Recently I decided to use Arduino to teach Digital Systems at my students and Matty came back to my mind.
+Recently I decided to use Arduino to teach Digital Systems to my students and Matty came back to my mind.
 
-This is the story on bringing Matty back to life!
+This is the story of bringing Matty back to life!
 
 ## Description
 Matty is a little cute robot, originally it was connected to WiFi using a pocket size router made by TP-Link (I think it was a clone of the WR703N... but I m not sure...).
-It is propelled by 2 engine wheels and a small pivot wheel for balance. It has an custom board that hosts an Arduino Mini Clone with ATmega168 MCU. The board has the motor H-Bridge for powering the motors and some circutry for power and connectors.
+It is propelled by 2 engine wheels and a small pivot wheel for balance. It has a custom board that hosts an Arduino Mini Clone with ATmega168 MCU. The board has the motor H-Bridge for powering the motors and some circutry for power and connectors.
 The power was originally provided by 2 x 3.7 LiON batteries which where used to power the engines and to get the 5Volt for the Arduino and the Servos.
 2 x Servos are used to give digital camera the Pan & Tilt, while an Ultrasound sensor is used for obstacles detection.
 
 Somehow the router was connected to the Arduino via USB-serial interface and used to control the robot from computer using a web-interface, which will show the buttons to control the robot and the streamed video as well.
 
-I must have lost some cables, since the router was not connected when I took it out from its tomb... the battery were dad and needed replacement....
+I must have lost some cables, since the router was not connected when I took it out from its tomb... the battery were dead and needed replacement....
 
 ### power it up
 First thing I tryed to connect it to a Power Bank with USB(5V) output, and as a miracle it powered up... it looks there is an LDO on the board and there is about 1V drop, powering the Arduino and Servos with 4V... but it still working.
@@ -173,6 +173,22 @@ OK... fixed... credit to https://github.com/saka-guchi/I2C_Between_Arduino_and_E
 This resulted in the ``Matty/I2Cplayground/2-BidirectionTest`` folder.
 
 If needed, I could use the I2C interface for data transfers from ESP-CAM --> Arduino and Serial Interface for transfers from the Arduino --> ESP-CAM effectevly doubling the data rate... we will see...
+
+On Matty shield, looks like there is a connector for another serial port next to a USB female connector... could it be that there is another HW port? ... no luck in finding out which MCU the clone is using... I am lucky that it is compatible with the ATMEGA128... the only indication I have is that the board is made by www.mjkdz.com and the MCU is a squared uChip with 8pin per side... wait a moment, it could be a AVR128DB32... which in the datasheet has 3 USART... after a google search it looks like the DB series came out in 2020 wich it would not be possible... I probably bought it in 2012/13??? Anyhow, I could do without it.
+
+Next will be to test I2C interface by sending a wave samples from the ESP-CAM --> Arduino and play it with the speaker.
+
+The issue is that the Arduino is very limited as far as memory (14 KBytes)!
+
+This is the strtategy I will implement: thus I would need to send and buffer a few samples (maybe 100 bytes) and as it starts playing the buffer(active) fillup another buffer(backup) and as long the backup buffer is filled before the active one has done playing, rotate the 2 buffers.
+
+In order to limit the ESP-CAM to send too mach data, The Arduino will send a (needMore) message to ESP-CAM whenever the Arduino start sending the samples from a buffer. The ESP-CAM will then send another bulk of 100samples to the Arduino, which will use to fillUp the current backup buffer. 
+
+The Arduino doesn't know how many samples are part of the same sound... thus it will stop playing, if by the time it finishes playing the ACTIVE buffer, the BACKUP buffer is still not been filled.
+
+This will require that the handshake between the Arduino and the ESP-CAM is fast enogh to allow the BACKUP buffer to be filled in time...
+
+In case thera are 100 Samples, 100/8k = 0.0125 secs = 12.5ms is that going to be enough?... we will see.
 
 ## What is next
 1. adding a speaker and the ability to play sounds
