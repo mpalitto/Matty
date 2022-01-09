@@ -166,7 +166,7 @@ it resulted in the ESPmaster_writer and slave_reader(Arduino) into the Matty/I2C
 
 Now I am going to try connection both direction...
 
-No, nor working... I don't get any data the way back... I am not sure why...
+No, not working... I don't get any data the way back... I am not sure why...
 
 OK... fixed... credit to https://github.com/saka-guchi/I2C_Between_Arduino_and_ESP32 and it works at 40Kbit/sec leaving the serial port available for debugging.
 
@@ -180,17 +180,23 @@ Next will be to test I2C interface by sending a wave samples from the ESP-CAM --
 
 The issue is that the Arduino is very limited as far as memory (14 KBytes)!
 
-This is the strtategy I will implement: thus I would need to send and buffer a few samples (maybe 100 bytes) and as it starts playing the buffer(active) fillup another buffer(backup) and as long the backup buffer is filled before the active one has done playing, rotate the 2 buffers.
+~~This is the strtategy I will implement: thus I would need to send and buffer a few samples (maybe 100 bytes) and as it starts playing the buffer(active) fillup another buffer(backup) and as long the backup buffer is filled before the active one has done playing, rotate the 2 buffers.
 
-In order to limit the ESP-CAM to send too mach data, The Arduino will send a (needMore) message to ESP-CAM whenever the Arduino start sending the samples from a buffer. The ESP-CAM will then send another bulk of 100samples to the Arduino, which will use to fillUp the current backup buffer. 
+~~In order to limit the ESP-CAM to send too mach data, The Arduino will send a (needMore) message to ESP-CAM whenever the Arduino start sending the samples from a buffer. The ESP-CAM will then send another bulk of 100samples to the Arduino, which will use to fillUp the current backup buffer. 
 
-The Arduino doesn't know how many samples are part of the same sound... thus it will stop playing, if by the time it finishes playing the ACTIVE buffer, the BACKUP buffer is still not been filled.
+~~The Arduino doesn't know how many samples are part of the same sound... thus it will stop playing, if by the time it finishes playing the ACTIVE buffer, the BACKUP buffer is still not been filled.
 
-This will require that the handshake between the Arduino and the ESP-CAM is fast enogh to allow the BACKUP buffer to be filled in time...
+~~This will require that the handshake between the Arduino and the ESP-CAM is fast enogh to allow the BACKUP buffer to be filled in time...
 
-In case there are 100 Samples, 100/8k = 0.0125 secs = 12.5ms is that going to be enough?... we will see.
+~~In case there are 100 Samples, 100/8k = 0.0125 secs = 12.5ms is that going to be enough?... we will see.
 
-Anyway, I found out that on each I2C message it can be sent up to 32 bytes of data... I will try limiting the buffer size to 30....
+~~Anyway, I found out that on each I2C message it can be sent up to 32 bytes of data... I will try limiting the buffer size to 30....
+
+The previous strategy was a non sense... What the architecture is going to be is to send data from ESP-CAM --> Arduino one byte at the time at a 8KHz rate, as soon as the Arduino receives the data will send it to the Speaker... as easy as that!!!
+
+That resulted on the `2-Master-ESP-orArduino` project for the Master and `2-Slave-Arduino` for the slave.
+
+Next it would be reading sound file from SD card, and play it through the arduino..
 
 ## What is next
 1. adding a speaker and the ability to play sounds
