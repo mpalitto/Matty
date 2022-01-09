@@ -192,9 +192,9 @@ The issue is that the Arduino is very limited as far as memory (14 KBytes)!
 
 ~~Anyway, I found out that on each I2C message it can be sent up to 32 bytes of data... I will try limiting the buffer size to 30....
 
-The previous strategy was a non sense... What the architecture is going to be is to send data from ESP-CAM --> Arduino one byte at the time at a 8KHz rate, as soon as the Arduino receives the data will send it to the Speaker... as easy as that!!!
+The previous strategy was a non sense (and it made me waste a lot of time trying implementing it)... What the architecture is going to be is to send data from ESP-CAM --> Arduino one byte at the time at a 8KHz rate, as soon as the Arduino receives the data will send it to the Speaker... as easy as that!!!
 
-That resulted on the `2-Master-ESP-orArduino` project for the Master and `2-Slave-Arduino` for the slave.
+That resulted on the `Matty/I2Cplayground/streaming2speaker`` folder.
 
 Next it would be reading sound file from SD card, and play it through the arduino..
 
