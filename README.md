@@ -194,10 +194,18 @@ The issue is that the Arduino is very limited as far as memory (14 KBytes)!
 
 The previous strategy was a non sense (and it made me waste a lot of time trying implementing it)... What the architecture is going to be is to send data from ESP-CAM --> Arduino one byte at the time at a 8KHz rate, as soon as the Arduino receives the data will send it to the Speaker... as easy as that!!!
 
-That resulted on the `Matty/I2Cplayground/streaming2speaker`` folder.
+That resulted on the `Matty/I2Cplayground/streaming2speaker` folder.
 
-Next it would be reading sound file from SD card, and play it through the arduino..
+Next it would be sending sound file from PC, and play it through the arduino..
 
+With ESP-CAM as a TCP/IP Socket Server, I send a RAW file using the following command:
+```
+cat filename.raw eol.txt | nc -w 1 192.168.X.YYY port
+```
+
+NOTA: -w 1 option will close the connection after 1s of STDIN inactivity
+
+The ESP-CAM will receive the RAW file and store it in Array  of bytes. EOF'\n' will be appended to the file (that's what "eol.txt" contains), WhenESP-CAM receives the EOF'\n', will start sending the samples to the Arduino and then to the Speaker.
 ## What is next
 1. adding a speaker and the ability to play sounds
 2. When the ESP-Cam arrives, replace the ESP-01 and allow video streaming
