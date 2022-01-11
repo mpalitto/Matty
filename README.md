@@ -206,6 +206,12 @@ cat filename.raw eol.txt | nc -w 1 192.168.X.YYY port
 NOTA: -w 1 option will close the connection after 1s of STDIN inactivity
 
 The ESP-CAM will receive the RAW file and store it in Array  of bytes. EOF'\n' will be appended to the file (that's what "eol.txt" contains), WhenESP-CAM receives the EOF'\n', will start sending the samples to the Arduino and then to the Speaker.
+
+This is getting annoing... it is taking me too long to figure this out...
+
+PROBLEM: It looks like I2C has a stability issue on the ESP-CAM... it came out when trying to transfer a big chunk of data(audio file) across it... maybe I am doing something wrong but I am not sure what is it...
+
+POSSIBLE SOLUTION (investigating): replace the I2C with the serial interface, which is annoying since every time I need to burn the firmware I need to disconnect and re-connect the serial connection... and I will not be able to use the serial Monitor for debugging (I am planning to use the WiFi connection)... and, maybe it is not gonna work anyhow... feeling disconfort right now.
 ## What is next
 1. adding a speaker and the ability to play sounds
 2. When the ESP-Cam arrives, replace the ESP-01 and allow video streaming
