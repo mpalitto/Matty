@@ -200,7 +200,7 @@ Next it would be sending sound file from PC, and play it through the arduino..
 
 With ESP-CAM as a TCP/IP Socket Server, I send a RAW file using the following command:
 ```
-cat filename.raw eol.txt | nc -w 1 192.168.X.YYY port
+cat filename.raw eof.txt | nc -w 1 192.168.X.YYY port
 ```
 
 NOTA: -w 1 option will close the connection after 1s of STDIN inactivity
