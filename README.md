@@ -218,6 +218,19 @@ POSSIBLE SOLUTION2 (will investigate): reading around the internet it looks like
 
 POSSIBLE SOLUTION3 (already tryed, but resulted in other issues): by using ``Wire.endTransmission(false);``, By passing the "false" will instruct the ESP32 not to put the I2C bus into High-Impedence beteen I2C bus transmitions by the same master... this was done for keeping ownership of the bus by the same master in case a multi-master connection sharing the same bus... but somehow the Arduino stop firing the onReceiving() method...
 
+SOLUTION1: this worked, I am finally able to send the RAW file from PC to ESP-CAM, and stream it to Arduino's Speaker through serial interface.
+For debugging I used a WiFi connected console. I had to manage 2 WiFi client connections, one for the console, and the other one for file transfer.
+The 1st(time wise) connection is the one used to send the debugging messages and I assume it will stay active for the whole debugging session.
+The 2nd connection is used for the file transfer, so it will be formed when user wants to send a file and it will be ended when file transfer is completed.
+
+this effort resulted in the `Matty/SerialPlayground/2-ESPmaster_streaming2Speaker` e `Matty/SerialPlayground/2-ArduinoSlave_streaming2Speaker`
+
+The sound it's a little distorted, I am not sure this is caused by the direct connection of Analog Out to Speaker without any impedence matching...
+
+When sending the command through the serial to the Arduino I have a "framing pattern" because when things are powered up send things to serial port indipendently from program, thus I need a way from Arduino side to figure out if what it reads from serial is somethig for it or not... After the framing pattern there are 2 bytes, 1st for command and the 2nd for sub-command. For example CMD s1 stands for "play Speaker" the second byte could be used in case there are multiple speakers (eventuality that will never happen).
+
+All these framing mess and WiFi complication could have been avoided if I2C would work... I am still planning onto checking SOLUTION2
+
 ## What is next
 1. adding a speaker and the ability to play sounds
 2. When the ESP-Cam arrives, replace the ESP-01 and allow video streaming
