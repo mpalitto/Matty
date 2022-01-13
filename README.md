@@ -233,7 +233,7 @@ All these framing mess and WiFi complication could have been avoided if I2C woul
 
 ## What is next
 1. adding a speaker and the ability to play sounds
-2. When the ESP-Cam arrives, replace the ESP-01 and allow video streaming
+~~2. When the ESP-Cam arrives, replace the ESP-01 and allow video streaming~~
 3. Add a mic Array for sound direction of arrival
 4. Add AI for object recognition and tracking
 5. House mapping based on object recognition
