@@ -146,10 +146,6 @@ The connection between the ESP32-CAM and the Arduino will be by the Serial inter
 
 ![image](https://user-images.githubusercontent.com/7433768/148441288-25dffbc9-9ef6-4339-bc62-5be37434ac21.png)
 
-
-### The Mic
-I am planning to use the Mic for providing vocal commands to Matty... Matty will be always listening... the Mic I have is INMP441 which gives a 24bit data trhrough an I2S interface... oops... I2S interface in not implemented in Arduino, beside a few models of them... OK then I am restriced in using an analog Mic and use the 8bit ADC embedded into the Arduino. I am planning on using 8KHz sampling rate (same as the speaker)... hope the quality will be sufficient...
-
 ### The ESP32 - Arduino data transfer Interface
 Mic stream will need 8 bit x 8Khz = 64 Kbit/s (Mic --> Arduino --> ESP-CAM)
 Speaker same as Mic but in opposit direction (ESP-CAM --> Arduino --> Speaker)
@@ -230,6 +226,18 @@ The sound it's a little distorted, I am not sure this is caused by the direct co
 When sending the command through the serial to the Arduino I have a "framing pattern" because when things are powered up send things to serial port indipendently from program, thus I need a way from Arduino side to figure out if what it reads from serial is somethig for it or not... After the framing pattern there are 2 bytes, 1st for command and the 2nd for sub-command. For example CMD s1 stands for "play Speaker" the second byte could be used in case there are multiple speakers (eventuality that will never happen).
 
 All these framing mess and WiFi complication could have been avoided if I2C would work... I am still planning onto checking SOLUTION2
+
+
+### The Mic
+I am planning to use the Mic for providing vocal commands to Matty... Matty will be always listening... the Mic I have is INMP441 which gives a 24bit data trhrough an I2S interface... oops... I2S interface in not implemented in Arduino, beside a few models of them... OK then I am restriced in using an analog Mic and use the 8bit ADC embedded into the Arduino. I am planning on using 8KHz sampling rate (same as the speaker)... hope the quality will be sufficient...
+
+So, I did not have the required pins on the ESP-CAM for the I2S interface, and thus I decided to use a 8266(D1 mini) board for the mic interface. I will be able to send data between the ESP-CAM and the D1 using I2C. I could also try to use D1 for first computation of sound signal...
+
+The code will get mic data down from 16bit 2s'complement number to 8bit unsigned number.
+There is an attenuation parameter that can be change that will allow us to avoid saturation.
+
+The capture and conversion code resulted in the "MattyI2Smic" project
+
 
 ## What is next
 1. adding a speaker and the ability to play sounds
