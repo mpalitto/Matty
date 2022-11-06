@@ -7,6 +7,8 @@ Recently I decided to use Arduino to teach Digital Systems to my students and Ma
 
 This is the story of bringing Matty back to life!
 
+**UPDATE:** I have found [Historical Documention](https://github.com/mpalitto/Matty/wiki/Historical-documentation) I made origianlly...
+
 ## Description
 Matty is a little cute robot, originally it was connected to WiFi using a pocket size router made by TP-Link (I think it was a clone of the WR703N... but I m not sure...).
 It is propelled by 2 engine wheels and a small pivot wheel for balance. It has a custom board that hosts an Arduino Mini Clone with ATmega168 MCU. The board has the motor H-Bridge for powering the motors and some circutry for power and connectors.
